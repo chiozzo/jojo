@@ -1,0 +1,17 @@
+{
+	"intents": [
+		{
+			"intent":"GetNeedStatus",
+			"slots":[
+				{
+				"name": "Need",
+				"type": "LITERAL"
+				},
+				{
+				"name": "Date",
+				"type": "AMAZON.DATE"
+				}
+			]
+		}
+	]
+}
