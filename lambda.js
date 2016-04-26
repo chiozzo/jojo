@@ -69,16 +69,24 @@ exports.handler = function (event, context) {
   function getWelcomeResponse(callback) {
     var sessionAttributes = {};
     var cardTitle = "Taking care of JoJo";
-    var voiceOutput = "What does JoJo need?";
 
-    var repromptVoiceOutput = "Please tell me what you're doing to take care of JoJo.";
+    var voiceOutput = "<speak>";
+    voiceOutput += "What does JoJo need?";
+    voiceOutput += "</speak>"
+
+    var cardBody = "";
+
+    var repromptVoiceOutput = "<speak>"
+    repromptVoiceOutput += "Please tell me what you're doing to take care of JoJo.";
     repromptVoiceOutput += "You can say ";
     repromptVoiceOutput += "'I'm giving JoJo food' or ";
     repromptVoiceOutput += "'I'm giving JoJo medicine' or ";
     repromptVoiceOutput += "'I'm giving JoJo butt punches'.";
+    repromptVoiceOutput += "</speak>"
+
     var shouldEndSession = false;
 
-    var builtSpeechletResponse = buildSpeechletResponse(cardTitle, voiceOutput, repromptVoiceOutput, shouldEndSession);
+    var builtSpeechletResponse = buildSpeechletResponse(cardTitle, cardBody, voiceOutput, repromptVoiceOutput, shouldEndSession);
 
     callback(sessionAttributes, builtSpeechletResponse);
   }
@@ -89,21 +97,21 @@ exports.handler = function (event, context) {
   /*
   These build functions are triggered for every event request type
   */
-  function buildSpeechletResponse(cardTitle, voiceOutput, repromptVoiceOutput, shouldEndSession) {
+  function buildSpeechletResponse(cardTitle, cardBody, voiceOutput, repromptVoiceOutput, shouldEndSession) {
     return {
       outputSpeech: {
-        type: "PlainText",
-        text: voiceOutput
+        type: "SSML",
+        ssml: voiceOutput
       },
       card: {
         type: "Simple",
         title: "SessionSpeechlet - " + cardTitle,
-        content: "SessionSpeechlet - " + voiceOutput
+        content: "SessionSpeechlet - " + cardBody
       },
       reprompt: {
         outputSpeech: {
-          type: "PlainText",
-          text: repromptVoiceOutput
+          type: "SSML",
+          ssml: repromptVoiceOutput
         }
       },
       shouldEndSession: shouldEndSession
