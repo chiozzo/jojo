@@ -5,7 +5,10 @@ VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{00C44D67-AC90-4EEC-8B42-5DC2D8EBEB52}"
 	ProjectSection(SolutionItems) = preProject
-		utterances.json = utterances.json
+		.gitignore = .gitignore
+		intent_schema.json = intent_schema.json
+		lambda.js = lambda.js
+		utterances.md = utterances.md
 	EndProjectSection
 EndProject
 Global
