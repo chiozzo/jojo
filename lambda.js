@@ -54,7 +54,10 @@ exports.handler = function (event, context) {
           context.succeed(buildResponse(sessionAttributes, speechletResponse));
         });
     } else if (event.request.type === "IntentRequest") {
-
+      onIntent(event.request,
+        function callback(sessionAttributes, speechletResponse) {
+          context.succeed(buildResponse(sessionAttributes, speechletResponse));
+      });
     } else if (event.request.type === "SessionEndedRequest") {
 
     }
@@ -64,6 +67,42 @@ exports.handler = function (event, context) {
 
   function onLaunch(callback) {
     getWelcomeResponse(callback);
+  }
+  function onIntent(eventRequest, callback) {
+    var intent = eventRequest.intent;
+    var intentName = intent.name;
+
+    switch (intentName) {
+      case "SetNeedMet": setNeedsMetToday(intent, callback); // NEED TO DEFINE THIS FUNCTION
+    }
+  }
+
+  function setNeedsMetToday(intent, callback) {
+    var sessionAttributes = {}; // WHAT THE F*CK ARE SESSION ATTRIBUTES?
+      //They are variables that you would like to save for the session, dummy. I'll be using Firebase as well for cross session persistence.
+
+    var cardTitle = "What JoJo needs:";
+    var needGivenSlot = intent.slots.Need;
+    var repromptVoiceOutput = "Apologies. ";
+    repromptVoiceOutput += "I was letting my mind wander and didn't hear you.";
+    repromptVoiceOutput += "What are you giving JoJo?";
+    var shouldEndSession = false;
+    var voiceOutput = "";
+    var cardBody = "";
+
+    if (needGivenSlot) {
+      var needGiven = needGivenSlot.value;
+      voiceOutput = "OK, You're giving JoJo ";
+      voiceOutput += needGiven;
+      voiceOutput += ". I'll make a note of it.";
+    } else {
+      voiceOutput = "If you tell me what you're giving JoJo then I'll make a note of it."
+    }
+
+    var builtSpeechletResponse = buildSpeechletResponse(cardTitle, cardBody, voiceOutput, repromptVoiceOutput, shouldEndSession)
+
+    callback(sessionAttributes, builtSpeechletResponse);
+
   }
 
   function getWelcomeResponse(callback) {
