@@ -48,6 +48,9 @@ exports.handler = function (event, context) {
     if (event.request.type === "LaunchRequest") {
       // onLaunch (request, session, callback(to build response)
       onLaunch(
+        /***
+        The following callback wrapper is used to take advantage of the Context Object (like a promise?) so that buildResponse only executes when ______ is successful.
+        ***/
         function callback(sessionAttributes, speechletResponse) {
           // info on the Context Object used in Node and/or AWS
           // http://docs.aws.amazon.com/lambda/latest/dg/nodejs-prog-model-context.html
@@ -73,18 +76,17 @@ exports.handler = function (event, context) {
     var intentName = intent.name;
 
     switch (intentName) {
-      case "SetNeedMet": setNeedsMetToday(intent, callback); // NEED TO DEFINE THIS FUNCTION
+      case "SetNeedMet": setNeedMetToday(intent, callback);
     }
   }
 
-  function setNeedsMetToday(intent, callback) {
-    var sessionAttributes = {}; // WHAT THE F*CK ARE SESSION ATTRIBUTES?
-      //They are variables that you would like to save for the session, dummy. I'll be using Firebase as well for cross session persistence.
+  function setNeedMetToday(intent, callback) {
+    var sessionAttributes = {};
 
     var cardTitle = "What JoJo needs:";
     var needGivenSlot = intent.slots.Need;
     var repromptVoiceOutput = "Apologies. ";
-    repromptVoiceOutput += "I was letting my mind wander and didn't hear you.";
+    repromptVoiceOutput += "I was letting my mind wander and didn't hear what you said.";
     repromptVoiceOutput += "What are you giving JoJo?";
     var shouldEndSession = false;
     var voiceOutput = "";
@@ -95,6 +97,11 @@ exports.handler = function (event, context) {
       voiceOutput = "OK, You're giving JoJo ";
       voiceOutput += needGiven;
       voiceOutput += ". I'll make a note of it.";
+
+      saveNeedToFirebase(needGiven); // NEED TO DEFINE THIS FUNCTION
+        // THIS SHOULD INCLUDE THE NEED & DATE/TIME
+        // USER COULD SPECIFY THROUGH INTERACTION MODEL, OR JUST USE NOW
+
     } else {
       voiceOutput = "If you tell me what you're giving JoJo then I'll make a note of it."
     }
