@@ -7,3 +7,6 @@ SetNeedMet I'm giving her {food|Need}
 SetNeedMet I'm going to give her {medicine|Need}
 SetNeedMet that I'm giving her {medicine|Need}
 SetNeedMet that I'm going to give her {food|Need}
+SetNeedMet that she's getting {food|Need}
+SetNeedMet that she's going to get {medicine|Need}
+SetNeedMet that she's gonna get {food|Need}
